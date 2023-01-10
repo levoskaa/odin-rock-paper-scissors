@@ -2,6 +2,16 @@ const ROCK = 'Rock';
 const PAPER = 'Paper';
 const SCISSORS = 'Scissors';
 
+function game() {
+  for (let i = 0; i < 5; i++) {
+    const playerSelection = prompt(
+      'Enter your choice: rock, paper or scissors!'
+    );
+    const result = playRound(playerSelection, getComputerChoice());
+    console.log(result);
+  }
+}
+
 function getComputerChoice() {
   const possibleChoices = [ROCK, PAPER, SCISSORS];
   const randomIndex = Math.floor(Math.random() * possibleChoices.length);
@@ -37,3 +47,5 @@ function playRound(playerSelection, computerSelection) {
 function capitalize(word) {
   return word[0].toUpperCase() + word.slice(1);
 }
+
+game();
