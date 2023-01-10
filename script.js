@@ -19,7 +19,6 @@ function game() {
     );
     const computerSelection = getComputerChoice();
     const result = playRound(playerSelection, computerSelection);
-
     logRoundResult(
       result,
       capitalize(playerSelection.toLowerCase()),
@@ -47,20 +46,13 @@ function playRound(playerSelection, computerSelection) {
   if (playerSelection === computerSelection.toUpperCase()) {
     return ROUND_RESULT.TIE;
   }
-
-  let hasPlayerWon;
-  switch (playerSelection) {
-    case CHOICE.ROCK.toUpperCase():
-      hasPlayerWon = computerSelection === CHOICE.SCISSORS;
-      break;
-    case CHOICE.PAPER.toUpperCase():
-      hasPlayerWon = computerSelection === CHOICE.ROCK;
-      break;
-    case CHOICE.SCISSORS.toUpperCase():
-      hasPlayerWon = computerSelection === CHOICE.PAPER;
-      break;
-  }
-
+  const hasPlayerWon =
+    (playerSelection === CHOICE.ROCK.toUpperCase() &&
+      computerSelection === CHOICE.SCISSORS) ||
+    (playerSelection === CHOICE.PAPER.toUpperCase() &&
+      computerSelection === CHOICE.ROCK) ||
+    (playerSelection === CHOICE.SCISSORS.toUpperCase() &&
+      computerSelection === CHOICE.PAPER);
   return hasPlayerWon ? ROUND_RESULT.PLAYER_WON : ROUND_RESULT.COMPUTER_WON;
 }
 
