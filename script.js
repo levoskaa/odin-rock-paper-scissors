@@ -1,62 +1,53 @@
+const score = document.querySelector(".score");
+const selectionBtns = document.querySelectorAll("[data-selection]");
+const roundResult = document.querySelector(".round-result");
+const finalResult = document.querySelector(".final-result");
+
 const CHOICE = {
-  ROCK: 'Rock',
-  PAPER: 'Paper',
-  SCISSORS: 'Scissors',
+  ROCK: "Rock",
+  PAPER: "Paper",
+  SCISSORS: "Scissors",
 };
 const ROUND_RESULT = {
-  PLAYER_WON: 'playerWon',
-  COMPUTER_WON: 'computerWon',
-  TIE: 'tie',
+  PLAYER_WON: "playerWon",
+  COMPUTER_WON: "computerWon",
+  TIE: "tie",
 };
 
-function game() {
-  let playerWins = 0;
-  let computerWins = 0;
+let playerWins = 0;
+let computerWins = 0;
 
-  for (let i = 0; i < 5; i++) {
-    const playerSelection = prompt(
-      'Enter your choice: rock, paper or scissors!'
-    );
-    const computerSelection = getComputerChoice();
-    const result = playRound(playerSelection, computerSelection);
-    logRoundResult(
-      result,
-      capitalize(playerSelection.toLowerCase()),
-      computerSelection
-    );
-    if (result === ROUND_RESULT.PLAYER_WON) {
-      playerWins++;
-    } else if (result === ROUND_RESULT.COMPUTER_WON) {
-      computerWins++;
-    }
+function play() {
+  const playerSelection = CHOICE[this.dataset.selection.toUpperCase()];
+  const computerSelection = getComputerSelection();
+  const result = playRound(playerSelection, computerSelection);
+  displayRoundResult(result, playerSelection, computerSelection);
+  updateScore(result);
+  displayScore(playerWins, computerWins);
+  if (playerWins === 5 || computerWins === 5) {
+    displayFinalResult();
   }
-
-  logFinalResult(playerWins, computerWins);
 }
 
-function getComputerChoice() {
+function getComputerSelection() {
   const possibleChoices = Object.values(CHOICE);
   const randomIndex = Math.floor(Math.random() * possibleChoices.length);
   return possibleChoices[randomIndex];
 }
 
 function playRound(playerSelection, computerSelection) {
-  // Convert to uppercase to check case-insensitively
-  playerSelection = playerSelection.toUpperCase();
-  if (playerSelection === computerSelection.toUpperCase()) {
+  if (playerSelection === computerSelection) {
     return ROUND_RESULT.TIE;
   }
   const hasPlayerWon =
-    (playerSelection === CHOICE.ROCK.toUpperCase() &&
+    (playerSelection === CHOICE.ROCK &&
       computerSelection === CHOICE.SCISSORS) ||
-    (playerSelection === CHOICE.PAPER.toUpperCase() &&
-      computerSelection === CHOICE.ROCK) ||
-    (playerSelection === CHOICE.SCISSORS.toUpperCase() &&
-      computerSelection === CHOICE.PAPER);
+    (playerSelection === CHOICE.PAPER && computerSelection === CHOICE.ROCK) ||
+    (playerSelection === CHOICE.SCISSORS && computerSelection === CHOICE.PAPER);
   return hasPlayerWon ? ROUND_RESULT.PLAYER_WON : ROUND_RESULT.COMPUTER_WON;
 }
 
-function logRoundResult(result, playerSelection, computerSelection) {
+function displayRoundResult(result, playerSelection, computerSelection) {
   let textResult;
   switch (result) {
     case ROUND_RESULT.PLAYER_WON:
@@ -66,17 +57,25 @@ function logRoundResult(result, playerSelection, computerSelection) {
       textResult = `You Lose! ${computerSelection} beats ${playerSelection}`;
       break;
     default:
-      textResult = 'Tie!';
+      textResult = "Tie!";
   }
-  console.log(textResult);
+  roundResult.textContent = textResult;
 }
 
-function logFinalResult(playerWins, computerWins) {
-  console.log(`Final result - You: ${playerWins}\tComputer: ${computerWins}`);
+function displayScore(playerWins, computerWins) {
+  score.textContent = `${playerWins} - ${computerWins}`;
 }
 
-function capitalize(word) {
-  return word[0].toUpperCase() + word.slice(1);
+function displayFinalResult() {
+  finalResult.textContent = playerWins === 5 ? "You won!!!" : "You lost!";
 }
 
-game();
+function updateScore(result) {
+  if (result === ROUND_RESULT.PLAYER_WON) {
+    playerWins++;
+  } else if (result === ROUND_RESULT.COMPUTER_WON) {
+    computerWins++;
+  }
+}
+
+selectionBtns.forEach((btn) => btn.addEventListener("click", play));
