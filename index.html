@@ -6,16 +6,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
 </head>
 
 <body>
-    <p class="score">0 - 0</p>
-    <button data-selection="rock">✊</button>
-    <button data-selection="paper">🖐️</button>
-    <button data-selection="scissors">✌️</button>
-    <p class="round-result"></p>
-    <p class="final-result"></p>
+    <main>
+        <h1>Rock Paper Scissors!</h1>
+        <p class="score">0 - 0</p>
+        <div class="selections">
+            <div class="selection-wrapper"><button data-selection="rock">✊</button></div>
+            <div class="selection-wrapper"><button data-selection="paper">🖐️</button></div>
+            <div class="selection-wrapper"><button data-selection="scissors">✌️</button></div>
+        </div>
+        <p class="round-result"></p>
+        <dialog class="game-end-modal">
+            <p class="final-result"></p>
+            <button class="btn" autofocus>Play again</button>
+        </dialog>
+    </main>
 </body>
 
 </html>

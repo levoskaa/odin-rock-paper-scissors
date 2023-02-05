@@ -1,7 +1,8 @@
 const score = document.querySelector(".score");
 const selectionBtns = document.querySelectorAll("[data-selection]");
-const roundResult = document.querySelector(".round-result");
 const finalResult = document.querySelector(".final-result");
+const dialog = document.querySelector("dialog");
+const playAgainBtn = dialog.querySelector("button");
 
 const CHOICE = {
   ROCK: "Rock",
@@ -59,7 +60,16 @@ function displayRoundResult(result, playerSelection, computerSelection) {
     default:
       textResult = "Tie!";
   }
-  roundResult.textContent = textResult;
+
+  const currentResult = document.querySelector(".round-result");
+  const newResult = currentResult.cloneNode();
+  newResult.textContent = textResult;
+  newResult.classList.add("hidden");
+  currentResult.parentNode.replaceChild(newResult, currentResult);
+  // Trigger layout recalculation to show transition when the class
+  // is removed.
+  newResult.offsetWidth;
+  newResult.classList.remove("hidden");
 }
 
 function displayScore(playerWins, computerWins) {
@@ -67,7 +77,11 @@ function displayScore(playerWins, computerWins) {
 }
 
 function displayFinalResult() {
-  finalResult.textContent = playerWins === 5 ? "You won!!!" : "You lost!";
+  finalResult.textContent =
+    playerWins === 5
+      ? `You won ${playerWins} to ${computerWins}!!!`
+      : `You lost ${computerWins} to ${playerWins}!`;
+  dialog.showModal();
 }
 
 function updateScore(result) {
@@ -78,4 +92,14 @@ function updateScore(result) {
   }
 }
 
+function reset() {
+  playerWins = 0;
+  computerWins = 0;
+  displayScore(playerWins, computerWins);
+  const roundResult = document.querySelector(".round-result");
+  roundResult.textContent = "";
+  dialog.close();
+}
+
 selectionBtns.forEach((btn) => btn.addEventListener("click", play));
+playAgainBtn.addEventListener("click", reset);
